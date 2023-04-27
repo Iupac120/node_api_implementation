@@ -13,7 +13,8 @@ const {products} = require('./data')
 // // const homeImage = fs.readFileSync(path.join(__dirname, 'public', 'logo.svg'),'utf8')
 
 // //set up static and middleware
-// app.use(express.static('public'))
+app.use(express.urlencoded({extended: false}))
+app.use(express.static('public2'))
 app.get('/',(req,res)=>{
     res.send('<h1>Home page</h1><a href="/api/products">products</a>')
 })
@@ -57,6 +58,24 @@ app.get('/api/v1/query',(req,res) => {
     }
     res.status(200).json(sortedProduct)
 })
+app.post('/login', (req,res) => {
+    const name = req.body.name
+    console.log(name)
+    if (name){
+        return res.status(201).json(`Welcome ${name}`)
+    }
+    res.send('You have not entered name')
+
+})
+app.post('/api/people', (req,res) => {
+    const name = req.body.body
+    console.log(name)
+    if (!name){
+        return res.status(401).json({success:false, msg:"please provide a name"})
+    }
+    res.status(200).json({msg:`welcome ${name}`})
+})
+
 app.all('*',(req,res) =>{
         res.status(200).send('<h1>Page not found</h1>')
     })
